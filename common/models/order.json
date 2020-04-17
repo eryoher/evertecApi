@@ -18,6 +18,12 @@
     },
     "status": {
       "type": "string"
+    },
+    "requestId": {
+      "type": "string"
+    },
+    "processUrl": {
+      "type": "string"
     }
   },
   "validations": [],
