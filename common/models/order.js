@@ -36,7 +36,7 @@ module.exports = function (Order) {
                 email:params.customer_email,
                 document:"14297922",
                 documentType:"CC",
-                mobile:customer_mobile
+                mobile:params.customer_mobile
              },
             payment: {
                 reference: product.name,
