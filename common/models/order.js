@@ -1,6 +1,9 @@
 'use strict';
 const RESTUtils = require('../utils/RESTUtils');
 const Request = require('../utils/Request');
+const CodeGenerator = require('../utils/CodeGenerator');
+const config = require('../../server/config.json');
+
 
 module.exports = function (Order) {
 
@@ -29,6 +32,14 @@ module.exports = function (Order) {
 
     Order.createOrder = async function (req, params) {
         const product = await Order.app.models.products.findById(params.productsId);
+        let reference = null;
+        let exists = null;
+        
+        do {
+            reference = await CodeGenerator.generateCode(8);
+            exists = await Order.findOne({ where: { referenceCode: reference } });  //Se valida de que el codigo sea unico.            
+        } while (exists !== null);
+
         const requestParams = {
             buyer:{
                 name:params.customer_name,
@@ -39,20 +50,22 @@ module.exports = function (Order) {
                 mobile:params.customer_mobile
              },
             payment: {
-                reference: product.name,
-                description: "Prueba de Comprar",
+                reference: reference,
+                description:product.name,
                 amount: {
                     currency: "COP",
                     total: product.price
                 }
-            }
+            },
+            returnUrl:`${config.returnUrl}${reference}`
+
         }
 
         try {
             const request = await Request.createRequest(requestParams);
             params.requestId = request.requestId;
             params.processUrl = request.processUrl;            
-            params.customer_name = params.customer_name.concat()
+            params.referenceCode = reference;
             const response = await Order.create(params);
             const order = await Order.findById(response.id, { include: ['products'] });
             return RESTUtils.buildSuccessResponse({ data: order });
@@ -88,6 +101,40 @@ module.exports = function (Order) {
             if (orderSearch.status !== params.status.status) { //Se compara el estado                                             
                 await orderSearch.updateAttributes({ status: params.status.status }); //Se modifica el estado.                                
             }
+
+        } catch (error) {
+            console.error(error)
+        }
+
+        return response;
+    }
+
+
+    Order.remoteMethod('getPayment', {
+        accepts: [
+            { arg: 'params', type: 'object', 'description': 'all object data', 'http': { 'source': 'body' } },
+
+        ],
+        returns: {
+            type: 'object',
+            root: true,
+            description: 'response data of service'
+        },
+        description: 'Post current orders',
+        http: {
+            verb: 'post'
+        },
+    });
+
+    Order.getPayment = async function (params) {
+        const response = true;
+        try {
+            const order = await Order.findOne({ where: { referenceCode: params.code } });
+            const payment = await Request.getRequest(order.requestId);
+            if (order.status !== payment.status.status) { //Se compara el estado                                             
+                await order.updateAttributes({ status: payment.status.status }); //Se modifica el estado.                                
+            }
+            return RESTUtils.buildSuccessResponse({ data: {payment, order} });            
 
         } catch (error) {
             console.error(error)

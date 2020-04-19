@@ -18,5 +18,13 @@
       "limit": "100kb"
     },
     "cors": false
+  },
+  "baseAppUrl" : "http://evertec.conjuntodigital.com/api/",
+  "returnUrl":"http://localhost:3000/request/",
+  "placeToPay":{
+    "passKey":"024h1IlD",
+    "login":"6dd490faf9cb87a9862245da41170ff2",
+    "urlRequest":"https://test.placetopay.com/redirection/api/session/"
   }
+  
 }

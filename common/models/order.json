@@ -35,6 +35,9 @@
     },
     "processUrl": {
       "type": "string"
+    },
+    "referenceCode": {
+      "type": "string"
     }
   },
   "validations": [],
