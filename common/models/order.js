@@ -82,6 +82,7 @@ module.exports = function (Order) {
 
     Order.checkPayment = async function (params) {
         const response = true;
+        console.log(params)
         try {
             const orderSearch = await Order.findOne({ where: { requestId: params.requestId } });
             if (orderSearch.status !== params.status.status) { //Se compara el estado                                             
