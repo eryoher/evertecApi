@@ -32,9 +32,9 @@ module.exports = function (Order) {
         const requestParams = {
             buyer:{
                 name:params.customer_name,
-                //surname:"Hernandez",
+                surname:params.customer_lastname,
                 email:params.customer_email,
-                document:"14297922",
+                document:params.customer_cedula,
                 documentType:"CC",
                 mobile:params.customer_mobile
              },
@@ -51,7 +51,8 @@ module.exports = function (Order) {
         try {
             const request = await Request.createRequest(requestParams);
             params.requestId = request.requestId;
-            params.processUrl = request.processUrl;
+            params.processUrl = request.processUrl;            
+            params.customer_name = params.customer_name.concat()
             const response = await Order.create(params);
             const order = await Order.findById(response.id, { include: ['products'] });
             return RESTUtils.buildSuccessResponse({ data: order });

@@ -15,6 +15,12 @@
     "customer_name": {
       "type": "string"
     },
+    "customer_lastname": {
+      "type": "string"
+    },
+    "customer_cedula": {
+      "type": "string"
+    },
     "customer_email": {
       "type": "string"
     },
