@@ -29,18 +29,27 @@ module.exports = function (Order) {
 
     Order.createOrder = async function (req, params) {
         const product = await Order.app.models.products.findById(params.productsId);
-
-        const payment = {
-            reference: product.name,
-            description: "Prueba de Comprar",
-            amount: {
-                currency: "COP",
-                total: product.price
+        const requestParams = {
+            buyer:{
+                name:params.customer_name,
+                //surname:"Hernandez",
+                email:params.customer_email,
+                document:"14297922",
+                documentType:"CC",
+                mobile:customer_mobile
+             },
+            payment: {
+                reference: product.name,
+                description: "Prueba de Comprar",
+                amount: {
+                    currency: "COP",
+                    total: product.price
+                }
             }
-        };
+        }
 
         try {
-            const request = await Request.createRequest(payment);
+            const request = await Request.createRequest(requestParams);
             params.requestId = request.requestId;
             params.processUrl = request.processUrl;
             const response = await Order.create(params);

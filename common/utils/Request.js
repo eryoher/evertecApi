@@ -6,25 +6,19 @@ const  Utf8 = require('crypto-js/enc-utf8');
 const moment = require('moment');
 const Axios = require('axios');
 
-const createRequest = async function (payment) {            
+const createRequest = async function (params) {            
     const urlRequest = 'https://test.placetopay.com/redirection/api/session/';
     const auth = await getAuthObject();
     const expiration = moment().add(1, 'week').format('YYYY-MM-DDTHH:mm:ssZ');
     const bodyRequest = {
-        "buyer":{
-           "name":"Ericson Yohany",
-           "surname":"Hernandez",
-           "email":"eryoher@gmail.com",
-           "document":"14297922",
-           "documentType":"CC",
-           "mobile":3127714046
-        },
-        payment,
+        buyer: params.buyer,
+        payment:params.payment,
         auth,
         expiration, 
-        "returnUrl":"http://localhost:3000/orders",
-        "ipAddress":"127.0.0.1",
-        "userAgent":"PlacetoPay Sandbox"
+        returnUrl:"http://localhost:3000/orders",
+        notificationURL : "http://evertec.conjuntodigital.com/api/orders/checkPayment",
+        ipAddress:"127.0.0.1",
+        userAgent:"PlacetoPay Sandbox"
     }
 
     try { 
