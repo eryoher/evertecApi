@@ -95,11 +95,12 @@ module.exports = function (Order) {
 
     Order.checkPayment = async function (params) {
         const response = true;
+        const newStatus = ( params.status.status === 'APPROVED' ) ? 'PAYED': params.status.status;
         console.log(params)
         try {
             const orderSearch = await Order.findOne({ where: { requestId: params.requestId } });
-            if (orderSearch.status !== params.status.status) { //Se compara el estado                                             
-                await orderSearch.updateAttributes({ status: params.status.status }); //Se modifica el estado.                                
+            if (orderSearch.status !== newStatus) { //Se compara el estado                                             
+                await orderSearch.updateAttributes({ status: newStatus }); //Se modifica el estado.                                
             }
 
         } catch (error) {
@@ -131,8 +132,10 @@ module.exports = function (Order) {
         try {
             const order = await Order.findOne({ where: { referenceCode: params.code } });
             const payment = await Request.getRequest(order.requestId);
-            if (order.status !== payment.status.status) { //Se compara el estado                                             
-                await order.updateAttributes({ status: payment.status.status }); //Se modifica el estado.                                
+            const newStatus = ( payment.status.status === 'APPROVED' ) ? 'PAYED': payment.status.status;
+
+            if (order.status !== newStatus) { //Se compara el estado                                             
+                await order.updateAttributes({ status: newStatus }); //Se modifica el estado.                                
             }
             return RESTUtils.buildSuccessResponse({ data: {payment, order} });            
 

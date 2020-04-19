@@ -10,7 +10,7 @@ const config = require('../../server/config.json');
 
 const createRequest = async function (params) {
     const auth = await getAuthObject();
-    const expiration = moment().add(1, 'hour').format('YYYY-MM-DDTHH:mm:ssZ');
+    const expiration = moment().add(1, 'day').format('YYYY-MM-DDTHH:mm:ssZ');
     const bodyRequest = {
         buyer: params.buyer,
         payment: params.payment,
