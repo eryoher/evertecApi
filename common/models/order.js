@@ -28,26 +28,61 @@ module.exports = function (Order) {
     });
 
     Order.createOrder = async function (req, params) {
+        const product = await Order.app.models.products.findById(params.productsId);
+
         const payment = {
-            reference: "test1",
+            reference: product.name,
             description: "Prueba de Comprar",
             amount: {
                 currency: "COP",
-                total: 10000
+                total: product.price
             }
         };
+
         try {
-            const request  = await Request.createRequest(payment);            
+            const request = await Request.createRequest(payment);
             params.requestId = request.requestId;
             params.processUrl = request.processUrl;
-            const response = await Order.create(params);            
-
-            return RESTUtils.buildSuccessResponse({ data: response });
+            const response = await Order.create(params);
+            const order = await Order.findById(response.id, { include: ['products'] });
+            return RESTUtils.buildSuccessResponse({ data: order });
 
         } catch (error) {
             console.error(error);
             throw RESTUtils.getServerErrorResponse(RESTUtils.ERROR_GENERIC);
         }
+    }
+
+
+    Order.remoteMethod('checkPayment', {
+        accepts: [
+            { arg: 'params', type: 'object', 'description': 'all object data', 'http': { 'source': 'body' } },
+
+        ],
+        returns: {
+            type: 'object',
+            root: true,
+            description: 'response data of service'
+        },
+        description: 'Post current orders',
+        http: {
+            verb: 'post'
+        },
+    });
+
+    Order.checkPayment = async function (params) {
+        const response = true;
+        try {
+            const orderSearch = await Order.findOne({ where: { requestId: params.requestId } });
+            if (orderSearch.status !== params.status.status) { //Se compara el estado                                             
+                await orderSearch.updateAttributes({ status: params.status.status }); //Se modifica el estado.                                
+            }
+
+        } catch (error) {
+            console.error(error)
+        }
+
+        return response;
     }
 
 };

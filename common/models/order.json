@@ -6,6 +6,11 @@
   "options": {
     "validateUpsert": true
   },
+  "mixins": {
+    "TimeStamp": {
+      "validateUpsert": true
+    }
+  },
   "properties": {
     "customer_name": {
       "type": "string"
@@ -27,12 +32,13 @@
     }
   },
   "validations": [],
-  "relations": {},
-  "acls": [],
-  "methods": {},
-  "mixins": {
-      "TimeStamp": {
-        "validateUpsert": true
-      }
+  "relations": {
+    "products": {
+      "type": "belongsTo",
+      "model": "products",
+      "foreignKey": "productsId"
     }
+  },
+  "acls": [],
+  "methods": {}
 }

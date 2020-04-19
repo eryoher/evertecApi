@@ -17,5 +17,9 @@
   "orders": {
     "dataSource": "db",
     "public": true
+  },
+  "products": {
+    "dataSource": "db",
+    "public": true
   }
 }

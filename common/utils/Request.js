@@ -22,7 +22,7 @@ const createRequest = async function (payment) {
         payment,
         auth,
         expiration, 
-        "returnUrl":"https://localhost:3001/api/response",
+        "returnUrl":"http://localhost:3000/orders",
         "ipAddress":"127.0.0.1",
         "userAgent":"PlacetoPay Sandbox"
     }
