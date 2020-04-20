@@ -25,25 +25,39 @@ DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_name` varchar(80) DEFAULT NULL,
+  `customer_lastname` varchar(80) DEFAULT NULL,
+  `customer_cedula` tinytext,
   `customer_email` tinytext,
   `customer_mobile` tinytext,
   `status` varchar(20) DEFAULT NULL,
+  `productsId` int(11) DEFAULT NULL,
+  `requestId` int(11) DEFAULT NULL,
+  `processUrl` tinytext,
   `createdAt` datetime DEFAULT NULL,
   `updatedAt` datetime DEFAULT NULL,
+  `referenceCode` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `orders`
+-- Table structure for table `products`
 --
 
-LOCK TABLES `orders` WRITE;
-/*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (1,'Ericson Hernandez','eryoher@gmail.com','3127714046','CREATED',NULL,NULL);
-/*!40000 ALTER TABLE `orders` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `products`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `products` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(80) DEFAULT NULL,
+  `price` int(11) DEFAULT NULL,
+  `createdAt` varchar(45) DEFAULT NULL,
+  `updatedAt` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -54,4 +68,9 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-12 18:22:06
+-- Dump completed on 2020-04-19 19:07:55
+
+
+/*!40000 ALTER TABLE `products` DISABLE KEYS */;
+INSERT INTO `products` VALUES (1,'Tapabocas marca Joker',8500,NULL,NULL),(2,'Guantes Marca Batman',12000,'2020-04-18 20:10:23.136','2020-04-18 20:10:23.136');
+/*!40000 ALTER TABLE `products` ENABLE KEYS */;
