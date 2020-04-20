@@ -1,5 +1,5 @@
 ### `npm install`
-
+To install the packages you need to use this command
 
 ### `npm start`
 
